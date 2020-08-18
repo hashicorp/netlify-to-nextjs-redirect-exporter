@@ -1,22 +1,24 @@
 {
-  "name": "blog-migration",
-  "version": "1.0.0",
+  "name": "netlify-to-nextjs-redirect-exporter",
+  "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "watch": "tsc --watch",
     "build": "tsc",
-    "execute": "npm run build && node ./lib/main.js",
+    "release:major": "release major && npm publish",
+    "release:minor": "release minor && npm publish",
+    "release:patch": "release patch && npm publish",
     "test": "jest"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Kevin Pruett",
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "@types/node": "^14.0.12",
     "jest": "^26.0.1",
+    "release": "^6.3.0",
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.5"
   }
