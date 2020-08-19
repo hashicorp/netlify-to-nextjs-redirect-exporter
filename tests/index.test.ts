@@ -1,5 +1,5 @@
 import pkg from "../package.json";
-import parseNetlifyRedirects from "../src";
+import { parseNetlifyRedirects } from "../src";
 
 describe(pkg.name, () => {
   describe(":: parseNetlifyRedirects", () => {
