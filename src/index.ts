@@ -22,9 +22,7 @@ type NextjsRules = {
   redirects: RedirectRule[];
 };
 
-export default function parseNetlifyRedirects(
-  redirectsSource: string
-): NextjsRules {
+export function parseNetlifyRedirects(redirectsSource: string): NextjsRules {
   return redirectsSource
     .split("\n")
     .map((line) => line.trim())
