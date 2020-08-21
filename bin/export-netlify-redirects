@@ -1,0 +1,47 @@
+#!/usr/bin/env node
+const fs = require("fs").promises;
+const path = require("path");
+const { parseNetlifyRedirects } = require("../lib");
+
+const netlifyPath = process.argv[2];
+
+const projectRoot = process.cwd();
+
+if (!netlifyPath) {
+  throw new Error("Please provide a path to the Netlify _redirects file");
+}
+
+async function run() {
+  const netlifyRedirectPath = path.join(projectRoot, netlifyPath);
+  const redirectsContents = await fs.readFile(netlifyRedirectPath, "utf8");
+  const { redirects, rewrites } = await parseNetlifyRedirects(
+    redirectsContents
+  );
+
+  if (redirects.length) {
+    const fileName = "redirects.next.js";
+    const outPath = path.join(projectRoot, fileName);
+    console.log(`Writing redirects file to ${fileName}...`);
+
+    await fs.writeFile(
+      outPath,
+      `module.exports = ${JSON.stringify(redirects)}`
+    );
+  }
+
+  if (rewrites.length) {
+    const fileName = "rewrites.next.js";
+    const outPath = path.join(projectRoot, fileName);
+    console.log(`Writing rewrites file to ${fileName}...`);
+
+    await fs.writeFile(outPath, `module.exports = ${JSON.stringify(rewrites)}`);
+  }
+
+  console.log("Done.");
+}
+
+try {
+  run();
+} catch (error) {
+  throw Error(error);
+}

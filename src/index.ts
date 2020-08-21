@@ -26,18 +26,53 @@ export function parseNetlifyRedirects(redirectsSource: string): NextjsRules {
   return redirectsSource
     .split("\n")
     .map((line) => line.trim())
-    .filter((result) => result)
-    .filter((line) => !line.startsWith("#"))
+    .filter(Boolean)
+    .filter(nonCommentedLines)
     .map(dissectRule)
     .filter(isNetlifyRule)
     .map(handleWildcardRules)
     .reduce(constructRedirectsAndRewrites, { rewrites: [], redirects: [] });
 }
 
+function nonCommentedLines(line: string): boolean {
+  return !line.startsWith("#");
+}
+
+export function dissectRule(rule: string): ParsedNetlifyRule | null {
+  const parts = rule
+    .replace(/\s+/g, " ")
+    .split(" ")
+    .map((x) => x.trim());
+
+  if (parts.length < 2) return null;
+
+  const [source, destination, statusCode] = parts;
+
+  // Ignore any non-relative `source` values
+  if (!source.startsWith("/")) return null;
+
+  // Ignore 4xx status code rules
+  if (parseInt(statusCode, 10) >= 400) return null;
+
+  return {
+    source,
+    destination,
+    statusCode: statusCode ? parseInt(statusCode, 10) : 301,
+  };
+}
+
 function isNetlifyRule(
   value: ParsedNetlifyRule | null
 ): value is ParsedNetlifyRule {
   return (value as ParsedNetlifyRule) !== null;
+}
+
+function handleWildcardRules(rule: ParsedNetlifyRule): ParsedNetlifyRule {
+  return {
+    ...rule,
+    source: rule.source.replace(/\/\*$/, "/:splat*"),
+    destination: rule.destination.replace(/\/:splat$/, "/:splat*"),
+  };
 }
 
 function constructRedirectsAndRewrites(
@@ -63,28 +98,5 @@ function constructRedirectsAndRewrites(
             },
           ]
         : acc.redirects,
-  };
-}
-
-function dissectRule(rule: string): ParsedNetlifyRule | null {
-  const parts = rule
-    .replace(/\s+/g, " ")
-    .split(" ")
-    .map((x) => x.trim());
-
-  if (parts.length < 2) return null;
-
-  return {
-    source: parts[0],
-    destination: parts[1],
-    statusCode: parts[2] ? parseInt(parts[2], 10) : 301,
-  };
-}
-
-function handleWildcardRules(rule: ParsedNetlifyRule): ParsedNetlifyRule {
-  return {
-    ...rule,
-    source: rule.source.replace(/\/\*$/, "/:splat*"),
-    destination: rule.destination.replace(/\/:splat$/, "/:splat*"),
   };
 }
