@@ -3,6 +3,9 @@
   "version": "0.0.5",
   "author": "Kevin Pruett",
   "description": "Convert Netlify redirects rules into Next.js-compatible redirect/rewrite rules",
+  "bin": {
+    "export-netlify-redirects": "bin/export-netlify-redirects"
+  },
   "main": "lib/index.js",
   "files": [
     "lib"

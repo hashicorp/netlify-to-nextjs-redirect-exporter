@@ -2,7 +2,7 @@
 
 # netlify-to-nextjs-redirect-exporter
 
-A library to convert a Netlify `_redirects` file into compatible Next.js rules
+A Node.js library and CLI that converts a Netlify `_redirects` file into compatible Next.js redirect rules
 
 ## Installation
 
@@ -10,7 +10,9 @@ A library to convert a Netlify `_redirects` file into compatible Next.js rules
 npm i @hashicorp/netlify-to-nextjs-redirect-exporter
 ```
 
-**Usage**
+### Usage
+
+#### Node.js
 
 ```ts
 // next.config.js
@@ -26,15 +28,16 @@ module.exports = {
 }
 ```
 
-## Active Development
+#### CLI
 
-**Install dependencies**
+```shell
+$ ./node_modules/.bin/export-netlify-redirects ./_redirects
+```
+
+## Active Development
 
 ```shell
 npm i
-```
-
-```shell
 npm run watch
 ```
 
