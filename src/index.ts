@@ -70,8 +70,8 @@ function isNetlifyRule(
 function handleWildcardRules(rule: ParsedNetlifyRule): ParsedNetlifyRule {
   return {
     ...rule,
-    source: rule.source.replace(/\/\*$/, "/:splat*"),
-    destination: rule.destination.replace(/\/:splat$/, "/:splat*"),
+    source: rule.source.replace(/\/\*$/, "/:splat+"),
+    destination: rule.destination.replace(/\/:splat$/, "/:splat+"),
   };
 }
 
