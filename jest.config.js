@@ -1,3 +1,7 @@
+/**
+ * Copyright IBM Corp. 2020, 2026
+ */
+
 module.exports = {
   clearMocks: true,
   moduleFileExtensions: ["js", "ts"],
